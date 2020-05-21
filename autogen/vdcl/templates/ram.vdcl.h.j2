@@ -1,0 +1,8 @@
+#ifndef {{ header }}
+#define {{ header }}
+{% for ramObj in ramList -%}
+#define  VTYP_{{ramObj.varName}}(x)   {{ramObj.varType}}    x{{ramObj.parameter}}
+#define  VDCL_{{ramObj.varName}}    extern   VTYP_{{ramObj.varName}}({{ramObj.varName}})
+
+{% endfor -%}
+#endif /*{{ header }}*/
