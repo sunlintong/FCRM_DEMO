@@ -9,7 +9,7 @@ class Ram:
         self.filePath = filePath
 
     def getFileBaseName(self):
-        tmp = self.filePath.split("/")[-1]
+        tmp = self.filePath.split(os.sep)[-1]
         return tmp.split(".")[0]
 
     def getVdclDefineName(self):
