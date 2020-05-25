@@ -1,8 +1,9 @@
-#conding=utf8
+# conding=utf8
 import os
 
-class Ram: 
-    def __init__(self, varName = "", varType = "" , parameter = "", filePath = ""):
+
+class Ram:
+    def __init__(self, varName="", varType="", parameter="", filePath=""):
         self.varName = varName
         self.varType = varType
         self.parameter = parameter
@@ -14,7 +15,7 @@ class Ram:
 
     def getVdclDefineName(self):
         return "VDCL_{};\n".format(self.varName)
-    
+
     def getIncludeExpression(self):
         return '#include "vdcl{0}{1}.vdcl.h"\n'.format(os.sep, self.getFileBaseName())
 

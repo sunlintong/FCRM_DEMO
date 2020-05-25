@@ -15,13 +15,14 @@ RamFileDict = {}
 
 vdclOutputDir = os.path.join(base.autogenDir, "inc", "vdcl")
 
+
 def InsertRamVdclVars():
     ramVarDict = getRamVariableDict()
     for path in getFilePathsToInsertRamVdcl():
         # mode: r+, 读写
         file = open(path, mode="r+", encoding="gbk")
         content = file.read()
-        file.seek(0) # 光标移回首部，便于下次读取
+        file.seek(0)  # 光标移回首部，便于下次读取
 
         parameterReg = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]*', re.S)
         varIter = re.finditer(parameterReg, content)
@@ -42,23 +43,22 @@ def InsertRamVdclVars():
 
                 VdclInsertContent += ramVar.getVdclDefineName()
 
-
         lines = file.readlines()
 
         # file.seek(0)
         # XXX 关闭文件后再打开，不知道为什么，用file.seek(0)移动光标后，会多写一些代码
         file.close()
         file = open(path, mode="w", encoding="gbk")
-        
+
         flag = False
         for i in range(len(lines)):
             if re.match(r'.*declaration.*begin.*', lines[i]):
-                i += 1 # i+1，否则会插到上面一行，导致下次又匹配到
+                i += 1  # i+1，否则会插到上面一行，导致下次又匹配到
                 lines.insert(i, VdclInsertContent)
                 logging.info(f"insert VDCL declare in file: {path}:{i}")
                 flag = True
                 break
-            
+
         if not flag:
             logging.warning(f"{path} not find [declaration begin]")
         file.write("".join(lines))
@@ -68,25 +68,17 @@ def InsertRamVdclVars():
         file = open(path, mode="w", encoding="gbk")
         for i in range(len(lines)):
             if re.match(r'.*header.*definition.*begin.*', lines[i]):
-                i += 1 # i+1，否则会插到上面一行，导致下次又匹配到
+                i += 1  # i+1，否则会插到上面一行，导致下次又匹配到
                 lines.insert(i, IncludeInsertContent)
                 logging.info(f"insert include declare in file: {path}:{i}")
                 flag = True
-                
+
                 break
 
         if not flag:
             logging.warning(f"{path} not find [header definition begin]")
         file.write("".join(lines))
         file.close()
-               
-                    
-
-                # logging.debug(var.start())
-                # logging.debug(var.end())
-                # logging.debug(var.span())
-                # logging.debug(var.group())
-        # logging.debug(tmp)
 
 
 def genarateRamVdclFiles(dict):
@@ -167,8 +159,9 @@ def initRamDicts():
                 # words[0]: 变量类型
                 # words[1]: 变量名
                 if words[1] in RamVariableDict:
-                    raise RuntimeError(f"变量: {words[0]} {words[1]}已在文件: {RamVariableDict[words[1]].filePath}中声明")
-                if len(words) >= 2 :
+                    raise RuntimeError(
+                        f"变量: {words[0]} {words[1]}已在文件: {RamVariableDict[words[1]].filePath}中声明")
+                if len(words) >= 2:
                     varType = words[0]
                     varName = words[1]
                     parameter = ""
